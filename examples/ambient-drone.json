@@ -1,0 +1,197 @@
+{
+  "title": "Ambient Drone",
+  "bpm": 60,
+  "key": "C",
+  "scale": "minor",
+  "voices": [
+    {
+      "id": "sub",
+      "type": "oscillator",
+      "waveform": "sine",
+      "gain": 0.18,
+      "envelope": {
+        "attack": 4.0,
+        "decay": 1.0,
+        "sustain": 0.7,
+        "release": 5.0
+      }
+    },
+    {
+      "id": "pad",
+      "type": "chord",
+      "waveform": "triangle",
+      "voices": 4,
+      "spread": 8,
+      "gain": 0.1,
+      "envelope": {
+        "attack": 2.5,
+        "decay": 1.0,
+        "sustain": 0.5,
+        "release": 3.0
+      },
+      "filter": {
+        "type": "lowpass",
+        "frequency": 1200,
+        "Q": 0.5
+      }
+    },
+    {
+      "id": "bell",
+      "type": "oscillator",
+      "waveform": "sine",
+      "gain": 0.14,
+      "envelope": {
+        "attack": 0.01,
+        "decay": 1.8,
+        "sustain": 0,
+        "release": 2.5
+      },
+      "pan": 0.35
+    },
+    {
+      "id": "bell2",
+      "type": "oscillator",
+      "waveform": "sine",
+      "gain": 0.1,
+      "envelope": {
+        "attack": 0.01,
+        "decay": 2.5,
+        "sustain": 0,
+        "release": 3.0
+      },
+      "pan": -0.4
+    }
+  ],
+  "patterns": [
+    {
+      "id": "sub-drone",
+      "voice": "sub",
+      "type": "drone",
+      "note": "C2"
+    },
+    {
+      "id": "pad-chords",
+      "voice": "pad",
+      "type": "progression",
+      "chords": [
+        {
+          "notes": [
+            "C3",
+            "Eb4",
+            "Bb4"
+          ],
+          "duration": "4m"
+        },
+        {
+          "notes": [
+            "Ab2",
+            "C4",
+            "G4"
+          ],
+          "duration": "4m"
+        },
+        {
+          "notes": [
+            "Bb2",
+            "D4",
+            "Ab4"
+          ],
+          "duration": "2m"
+        },
+        {
+          "notes": [
+            "G2",
+            "Bb3",
+            "F4"
+          ],
+          "duration": "2m"
+        }
+      ],
+      "velocity": 0.6,
+      "loop": true
+    },
+    {
+      "id": "bells-high",
+      "voice": "bell",
+      "type": "generative",
+      "pool": [
+        "Eb5",
+        "G5",
+        "Bb5",
+        "C6"
+      ],
+      "rate": "1m",
+      "probability": 0.45,
+      "velocityRange": [
+        0.3,
+        0.65
+      ],
+      "humanize": 0.15,
+      "loop": true
+    },
+    {
+      "id": "bells-low",
+      "voice": "bell2",
+      "type": "generative",
+      "pool": [
+        "G4",
+        "C5",
+        "Eb5"
+      ],
+      "rate": "2m",
+      "probability": 0.4,
+      "velocityRange": [
+        0.2,
+        0.5
+      ],
+      "humanize": 0.2,
+      "loop": true
+    }
+  ],
+  "timeline": [
+    {
+      "type": "start",
+      "pattern": "pad-chords",
+      "offset": "4m"
+    },
+    {
+      "type": "start",
+      "pattern": "bells-high",
+      "offset": "8m"
+    },
+    {
+      "type": "start",
+      "pattern": "bells-low",
+      "offset": "12m"
+    },
+    {
+      "target": "pad",
+      "to": {
+        "filter.frequency": 2200
+      },
+      "duration": "8m",
+      "offset": "8m"
+    },
+    {
+      "target": "master.reverb",
+      "to": {
+        "wet": 0.6
+      },
+      "duration": "8m",
+      "offset": "12m"
+    }
+  ],
+  "master": {
+    "reverb": {
+      "decay": 4.0,
+      "wet": 0.38,
+      "damping": 0.35
+    },
+    "compression": {
+      "threshold": -18,
+      "ratio": 3
+    },
+    "warmth": 0.5,
+    "gain": 0.7
+  }
+}

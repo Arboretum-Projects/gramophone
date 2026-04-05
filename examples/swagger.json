@@ -1,0 +1,166 @@
+{
+  "title": "Swagger",
+  "bpm": 110,
+  "key": "Bb",
+  "scale": "major",
+  "swing": 0.04,
+  "voices": [
+    { "id": "kick", "type": "drum", "sound": "kick", "gain": 0.7 },
+    { "id": "snare", "type": "drum", "sound": "snare", "gain": 0.5 },
+    { "id": "hat", "type": "drum", "sound": "hihat", "gain": 0.28, "decay": -0.2 },
+    { "id": "clap", "type": "drum", "sound": "clap", "gain": 0.22 },
+    {
+      "id": "bass",
+      "type": "oscillator",
+      "waveform": "sawtooth",
+      "gain": 0.22,
+      "envelope": { "attack": 0.005, "decay": 0.15, "sustain": 0.4, "release": 0.08 },
+      "filter": { "type": "lowpass", "frequency": 800, "Q": 1.5 },
+      "sidechain": { "source": "kick", "amount": 0.5, "release": 0.08 }
+    },
+    {
+      "id": "stab",
+      "type": "oscillator",
+      "waveform": "square",
+      "gain": 0.1,
+      "detune": 6,
+      "pan": 0.2,
+      "envelope": "stab",
+      "filter": { "type": "lowpass", "frequency": 3000 }
+    },
+    {
+      "id": "keys",
+      "type": "oscillator",
+      "waveform": "square",
+      "gain": 0.09,
+      "detune": 3,
+      "pan": -0.25,
+      "envelope": "pluck",
+      "filter": { "type": "lowpass", "frequency": 2500 }
+    },
+    {
+      "id": "pad",
+      "type": "chord",
+      "waveform": "triangle",
+      "voices": 3,
+      "spread": 5,
+      "gain": 0.06,
+      "envelope": { "attack": 1.0, "decay": 0.4, "sustain": 0.5, "release": 1.5 },
+      "filter": { "type": "lowpass", "frequency": 1500 }
+    }
+  ],
+  "patterns": [
+    {
+      "id": "kick-pattern",
+      "voice": "kick",
+      "type": "rhythm",
+      "steps": 16,
+      "hits": [1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 1],
+      "velocity": [1.0, 0, 0, 0, 0, 0, 0.8, 0, 0, 0, 0.85, 0, 0, 0, 0, 0.7],
+      "loop": true
+    },
+    {
+      "id": "hat-pattern",
+      "voice": "hat",
+      "type": "rhythm",
+      "steps": 16,
+      "hits": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      "velocity": [0.7, 0.3, 0.5, 0.3, 0.65, 0.3, 0.5, 0.35, 0.7, 0.3, 0.5, 0.3, 0.65, 0.3, 0.5, 0.35],
+      "velocityHumanize": 0.1,
+      "humanize": 0.005,
+      "loop": true
+    },
+    {
+      "id": "snare-pattern",
+      "voice": "snare",
+      "type": "rhythm",
+      "steps": 16,
+      "hits": [0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 1],
+      "velocity": [0, 0, 0, 0, 0.85, 0, 0, 0.35, 0, 0, 0, 0, 0.9, 0, 0, 0.4],
+      "velocityHumanize": 0.08,
+      "loop": true
+    },
+    {
+      "id": "clap-pattern",
+      "voice": "clap",
+      "type": "rhythm",
+      "steps": 16,
+      "hits": [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+      "velocity": [0, 0, 0, 0, 0.55, 0, 0, 0, 0, 0, 0, 0, 0.6, 0, 0, 0],
+      "loop": true
+    },
+    {
+      "id": "bass-notes",
+      "voice": "bass",
+      "type": "notes",
+      "notes": [
+        "Bb2", "-", "-", "Bb3", "-", "Bb2", "-", "-", "C3", "-", "D3", "-", "-", "-", "Bb2", "-",
+        "Bb2", "-", "-", "Bb3", "-", "F3", "-", "-", "Eb3", "-", "D3", "-", "C3", "-", "Bb2", "-"
+      ],
+      "duration": "1/16",
+      "velocity": [
+        0.9, 0, 0, 0.7, 0, 0.6, 0, 0, 0.5, 0, 0.75, 0, 0, 0, 0.85, 0,
+        0.9, 0, 0, 0.7, 0, 0.65, 0, 0, 0.6, 0, 0.7, 0, 0.55, 0, 0.85, 0
+      ],
+      "humanize": 0.008,
+      "loop": true
+    },
+    {
+      "id": "stab-notes",
+      "voice": "stab",
+      "type": "notes",
+      "notes": ["-", "-", "Bb4", "-", "-", "-", "Bb4", "-", "-", "-", "F4", "-", "-", "-", "Bb4", "-"],
+      "duration": "1/16",
+      "velocity": [0, 0, 0.6, 0, 0, 0, 0.75, 0, 0, 0, 0.55, 0, 0, 0, 0.7, 0],
+      "velocityHumanize": 0.08,
+      "loop": true
+    },
+    {
+      "id": "keys-riff",
+      "voice": "keys",
+      "type": "notes",
+      "notes": [
+        "Bb4", "-", "-", "D5", "-", "Bb4", "-", "-", "C5", "-", "D5", "-", "-", "-", "Bb4", "-",
+        "-", "-", "F5", "-", "Eb5", "-", "D5", "-", "-", "-", "C5", "-", "Bb4", "-", "-", "-"
+      ],
+      "duration": "1/16",
+      "velocity": [
+        0.7, 0, 0, 0.5, 0, 0.6, 0, 0, 0.45, 0, 0.65, 0, 0, 0, 0.7, 0,
+        0, 0, 0.6, 0, 0.55, 0, 0.65, 0, 0, 0, 0.5, 0, 0.7, 0, 0, 0
+      ],
+      "humanize": 0.008,
+      "loop": true
+    },
+    {
+      "id": "chords",
+      "voice": "pad",
+      "type": "progression",
+      "chords": [
+        { "notes": ["Bb3", "D4", "F4"], "duration": "2m" },
+        { "notes": ["Bb3", "Eb4", "G4"], "duration": "2m" },
+        { "notes": ["A3", "C4", "F4"], "duration": "2m" },
+        { "notes": ["Bb3", "D4", "F4"], "duration": "2m" }
+      ],
+      "velocity": 0.5,
+      "loop": true
+    }
+  ],
+  "timeline": [
+    { "type": "start", "pattern": "snare-pattern", "offset": "4m" },
+    { "type": "start", "pattern": "clap-pattern", "offset": "4m" },
+    { "type": "start", "pattern": "bass-notes", "offset": "4m" },
+    { "type": "start", "pattern": "stab-notes", "offset": "8m" },
+    { "type": "start", "pattern": "keys-riff", "offset": "12m" },
+    { "type": "start", "pattern": "chords", "offset": "12m" },
+    { "target": "bass", "to": { "filter.frequency": 1200 }, "duration": "8m", "offset": "8m" },
+    { "target": "stab", "to": { "gain": 0.14 }, "duration": "4m", "offset": "12m" },
+    { "target": "keys", "to": { "filter.frequency": 4000 }, "duration": "8m", "offset": "12m" }
+  ],
+  "master": {
+    "reverb": { "decay": 1.5, "wet": 0.15, "damping": 0.6 },
+    "delay": { "time": "3/8", "feedback": 0.2, "wet": 0.12 },
+    "compression": { "threshold": -10, "ratio": 5 },
+    "warmth": 0.35,
+    "gain": 0.75
+  }
+}

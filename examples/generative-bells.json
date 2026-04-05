@@ -1,0 +1,144 @@
+{
+  "title": "Generative Bells",
+  "bpm": 72,
+  "key": "D",
+  "scale": "pentatonic",
+  "voices": [
+    {
+      "id": "high-bell",
+      "type": "oscillator",
+      "waveform": "sine",
+      "gain": 0.18,
+      "envelope": {
+        "attack": 0.003,
+        "decay": 0.8,
+        "sustain": 0,
+        "release": 0.6
+      },
+      "pan": 0.4
+    },
+    {
+      "id": "mid-bell",
+      "type": "oscillator",
+      "waveform": "sine",
+      "gain": 0.15,
+      "envelope": {
+        "attack": 0.005,
+        "decay": 1.2,
+        "sustain": 0,
+        "release": 0.8
+      },
+      "pan": -0.35
+    },
+    {
+      "id": "low-bell",
+      "type": "oscillator",
+      "waveform": "triangle",
+      "gain": 0.12,
+      "envelope": {
+        "attack": 0.01,
+        "decay": 1.8,
+        "sustain": 0,
+        "release": 1.2
+      },
+      "pan": 0.1
+    }
+  ],
+  "patterns": [
+    {
+      "id": "high",
+      "voice": "high-bell",
+      "type": "generative",
+      "pool": [
+        "D6",
+        "E6",
+        "A6",
+        "B6"
+      ],
+      "rate": "1/4",
+      "probability": 0.3,
+      "velocityRange": [
+        0.25,
+        0.7
+      ],
+      "humanize": 0.04,
+      "loop": true
+    },
+    {
+      "id": "mid",
+      "voice": "mid-bell",
+      "type": "generative",
+      "pool": [
+        "D5",
+        "A5",
+        "B5",
+        "D6"
+      ],
+      "rate": "1/2",
+      "probability": 0.45,
+      "velocityRange": [
+        0.35,
+        0.8
+      ],
+      "humanize": 0.06,
+      "loop": true
+    },
+    {
+      "id": "low",
+      "voice": "low-bell",
+      "type": "generative",
+      "pool": [
+        "D3",
+        "A3",
+        "D4"
+      ],
+      "rate": "1m",
+      "probability": 0.55,
+      "velocityRange": [
+        0.4,
+        0.75
+      ],
+      "humanize": 0.1,
+      "loop": true
+    }
+  ],
+  "timeline": [
+    {
+      "type": "start",
+      "pattern": "mid",
+      "offset": "2m"
+    },
+    {
+      "type": "start",
+      "pattern": "high",
+      "offset": "4m"
+    },
+    {
+      "target": "master.reverb",
+      "to": {
+        "wet": 0.65
+      },
+      "duration": "8m",
+      "offset": "4m"
+    }
+  ],
+  "master": {
+    "reverb": {
+      "decay": 3.5,
+      "wet": 0.35,
+      "damping": 0.3
+    },
+    "delay": {
+      "time": "3/8",
+      "feedback": 0.35,
+      "wet": 0.2,
+      "filter": 3000
+    },
+    "compression": {
+      "threshold": -20,
+      "ratio": 2
+    },
+    "warmth": 0.45,
+    "gain": 0.65
+  }
+}

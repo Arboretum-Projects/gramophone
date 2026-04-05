@@ -1,0 +1,185 @@
+{
+  "title": "Pattern Blue",
+  "bpm": 118,
+  "key": "D",
+  "scale": "harmonicMinor",
+  "swing": 0.02,
+  "voices": [
+    { "id": "kick", "type": "drum", "sound": "kick", "gain": 0.65, "pitch": -1 },
+    { "id": "snare", "type": "drum", "sound": "snare", "gain": 0.4, "pitch": 3 },
+    { "id": "hat", "type": "drum", "sound": "hihat", "gain": 0.2 },
+    { "id": "rim", "type": "drum", "sound": "rim", "gain": 0.12, "pitch": 6 },
+    {
+      "id": "sub",
+      "type": "oscillator",
+      "waveform": "sine",
+      "gain": 0.2,
+      "envelope": { "attack": 0.01, "decay": 0.3, "sustain": 0.4, "release": 0.15 },
+      "sidechain": { "source": "kick", "amount": 0.8, "release": 0.09 }
+    },
+    {
+      "id": "bass",
+      "type": "oscillator",
+      "waveform": "sawtooth",
+      "gain": 0.14,
+      "detune": 3,
+      "envelope": { "attack": 0.003, "decay": 0.1, "sustain": 0.35, "release": 0.08 },
+      "filter": { "type": "lowpass", "frequency": 500, "Q": 3 },
+      "sidechain": { "source": "kick", "amount": 0.65, "release": 0.1 }
+    },
+    {
+      "id": "pad",
+      "type": "chord",
+      "waveform": "triangle",
+      "voices": 3,
+      "spread": 8,
+      "gain": 0.08,
+      "envelope": { "attack": 2.0, "decay": 0.5, "sustain": 0.5, "release": 3.0 },
+      "filter": { "type": "lowpass", "frequency": 1200, "Q": 1 },
+      "sidechain": { "source": "kick", "amount": 0.15, "release": 0.15 }
+    },
+    {
+      "id": "arp-voice",
+      "type": "oscillator",
+      "waveform": "sawtooth",
+      "gain": 0.06,
+      "detune": 4,
+      "envelope": "pluck",
+      "filter": { "type": "bandpass", "frequency": 3200, "Q": 2 },
+      "pan": -0.3
+    },
+    {
+      "id": "lead",
+      "type": "oscillator",
+      "waveform": "square",
+      "gain": 0.08,
+      "detune": 6,
+      "envelope": { "attack": 0.008, "decay": 0.12, "sustain": 0.3, "release": 0.35 },
+      "filter": { "type": "lowpass", "frequency": 2800, "Q": 2.5 },
+      "pan": 0.2
+    }
+  ],
+  "patterns": [
+    {
+      "id": "kick-beat",
+      "voice": "kick",
+      "type": "rhythm",
+      "steps": 16,
+      "hits":     [1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0],
+      "velocity": [1, 0, 0, 0, 0.8, 0, 0, 0.6, 0, 0, 0.85, 0, 0.95, 0, 0, 0],
+      "loop": true
+    },
+    {
+      "id": "snare-beat",
+      "voice": "snare",
+      "type": "rhythm",
+      "steps": 16,
+      "hits":     [0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0],
+      "velocity": [0, 0, 0.35, 0, 0.9, 0, 0, 0.3, 0, 0, 0.35, 0, 0.85, 0, 0.3, 0],
+      "velocityHumanize": 0.06,
+      "loop": true
+    },
+    {
+      "id": "hat-beat",
+      "voice": "hat",
+      "type": "rhythm",
+      "steps": 16,
+      "hits":     [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+      "velocity": [0.5, 0, 0.35, 0, 0.45, 0, 0.35, 0, 0.5, 0, 0.35, 0, 0.45, 0, 0.4, 0],
+      "velocityHumanize": 0.1,
+      "loop": true
+    },
+    {
+      "id": "rim-pattern",
+      "voice": "rim",
+      "type": "rhythm",
+      "steps": 16,
+      "hits":     [0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+      "velocity": [0, 0, 0, 0.4, 0, 0, 0, 0, 0, 0, 0, 0.35, 0, 0, 0, 0],
+      "loop": true
+    },
+    {
+      "id": "sub-drone",
+      "voice": "sub",
+      "type": "drone",
+      "note": "D1",
+      "velocity": 0.85,
+      "loop": true
+    },
+    {
+      "id": "bassline",
+      "voice": "bass",
+      "type": "notes",
+      "notes": ["D2", "D2", "D2", "D2", "D2", "D2", "A1", "A1",
+                 "Bb1", "Bb1", "Bb1", "Bb1", "A1", "A1", "C#2", "C#2"],
+      "duration": "1/16",
+      "velocity": [0.8, 0.5, 0.7, 0.5, 0.75, 0.5, 0.65, 0.4,
+                   0.75, 0.5, 0.7, 0.5, 0.65, 0.4, 0.7, 0.55],
+      "velocityHumanize": 0.08,
+      "humanize": 0.005,
+      "loop": true
+    },
+    {
+      "id": "pad-chords",
+      "voice": "pad",
+      "type": "progression",
+      "chords": [
+        { "notes": ["D3", "F4", "C#5"], "duration": "2m" },
+        { "notes": ["Bb2", "D4", "A4"], "duration": "2m" },
+        { "notes": ["G3", "Bb4", "F5"], "duration": "2m" },
+        { "notes": ["A2", "C#4", "G4"], "duration": "2m" }
+      ],
+      "velocity": 0.5,
+      "loop": true
+    },
+    {
+      "id": "arp",
+      "voice": "arp-voice",
+      "type": "arpeggio",
+      "chord": ["D4", "G4", "A4", "D5"],
+      "direction": "downup",
+      "rate": "1/16",
+      "octaves": 1,
+      "velocity": 0.45,
+      "velocityHumanize": 0.1,
+      "humanize": 0.005,
+      "loop": true
+    },
+    {
+      "id": "lead-melody",
+      "voice": "lead",
+      "type": "notes",
+      "notes": ["A5", "-", "-", "D5", "-", "-", "F5", "-",
+                 "A5", "-", "G5", "-", "-", "-", "-", "-",
+                 "Bb5", "-", "-", "F5", "-", "-", "A4", "-",
+                 "C#5", "-", "D5", "-", "-", "-", "-", "-"],
+      "duration": "1/8",
+      "velocity": [0.85, 0, 0, 0.6, 0, 0, 0.55, 0,
+                   0.8, 0, 0.5, 0, 0, 0, 0, 0,
+                   0.75, 0, 0, 0.55, 0, 0, 0.6, 0,
+                   0.7, 0, 0.8, 0, 0, 0, 0, 0],
+      "humanize": 0.01,
+      "loop": true
+    }
+  ],
+  "timeline": [
+    { "type": "start", "pattern": "kick-beat", "offset": "4m" },
+    { "type": "start", "pattern": "snare-beat", "offset": "4m" },
+    { "type": "start", "pattern": "hat-beat", "offset": "4m" },
+    { "type": "start", "pattern": "rim-pattern", "offset": "6m" },
+    { "type": "start", "pattern": "arp", "offset": "8m" },
+    { "type": "start", "pattern": "lead-melody", "offset": "12m" },
+
+    { "target": "pad", "to": { "filter.frequency": 2400 }, "duration": "8m", "offset": "4m" },
+    { "target": "bass", "to": { "filter.frequency": 900 }, "duration": "4m", "offset": "8m" },
+    { "target": "lead", "to": { "filter.frequency": 4200 }, "duration": "4m", "offset": "12m" },
+    { "target": "master.reverb", "to": { "wet": 0.38 }, "duration": "8m", "offset": "4m" }
+  ],
+  "master": {
+    "reverb": { "decay": 2.5, "wet": 0.25, "damping": 0.5 },
+    "delay": { "time": "3/8", "feedback": 0.28, "wet": 0.15, "filter": 2200 },
+    "compression": { "threshold": -10, "ratio": 4.5 },
+    "warmth": 0.35,
+    "gain": 0.75
+  }
+}

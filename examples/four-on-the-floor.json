@@ -1,0 +1,113 @@
+{
+  "title": "Four on the Floor",
+  "bpm": 124,
+  "key": "A",
+  "scale": "minor",
+  "swing": 0.05,
+  "voices": [
+    { "id": "kick", "type": "drum", "sound": "kick", "gain": 0.75 },
+    { "id": "snare", "type": "drum", "sound": "snare", "gain": 0.5, "pitch": 2 },
+    { "id": "hat", "type": "drum", "sound": "hihat", "gain": 0.3 },
+    { "id": "hat-open", "type": "drum", "sound": "hihat", "gain": 0.25, "decay": 3 },
+    {
+      "id": "bass",
+      "type": "oscillator",
+      "waveform": "sawtooth",
+      "gain": 0.25,
+      "envelope": { "attack": 0.005, "decay": 0.15, "sustain": 0.4, "release": 0.1 },
+      "filter": { "type": "lowpass", "frequency": 600, "Q": 2 },
+      "sidechain": { "source": "kick", "amount": 0.7, "release": 0.12 }
+    },
+    {
+      "id": "lead",
+      "type": "oscillator",
+      "waveform": "square",
+      "gain": 0.12,
+      "detune": 5,
+      "envelope": { "attack": 0.01, "decay": 0.2, "sustain": 0.3, "release": 0.3 },
+      "filter": { "type": "lowpass", "frequency": 3000, "Q": 1 }
+    }
+  ],
+  "patterns": [
+    {
+      "id": "kick-beat",
+      "voice": "kick",
+      "type": "rhythm",
+      "steps": 16,
+      "hits":     [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0],
+      "velocity": [1, 0, 0, 0, 0.9, 0, 0, 0, 1, 0, 0, 0, 0.9, 0, 0, 0],
+      "loop": true
+    },
+    {
+      "id": "snare-beat",
+      "voice": "snare",
+      "type": "rhythm",
+      "steps": 16,
+      "hits":     [0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+      "velocity": [0, 0, 0, 0, 0.9, 0, 0, 0, 0, 0, 0, 0.35, 0.85, 0, 0, 0],
+      "velocityHumanize": 0.05,
+      "loop": true
+    },
+    {
+      "id": "hat-beat",
+      "voice": "hat",
+      "type": "rhythm",
+      "steps": 16,
+      "hits":     [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0],
+      "velocity": [0.7, 0, 0.45, 0, 0.65, 0, 0.4, 0, 0.7, 0, 0.45, 0, 0.65, 0, 0.4, 0],
+      "velocityHumanize": 0.12,
+      "loop": true
+    },
+    {
+      "id": "hat-open-beat",
+      "voice": "hat-open",
+      "type": "rhythm",
+      "steps": 16,
+      "hits":     [0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+      "velocity": [0, 0, 0, 0.6, 0, 0, 0, 0.55, 0, 0, 0, 0.6, 0, 0, 0, 0.65],
+      "velocityHumanize": 0.08,
+      "loop": true
+    },
+    {
+      "id": "bassline",
+      "voice": "bass",
+      "type": "notes",
+      "notes": ["A1", "A1", "-", "A2", "-", "A1", "-", "-",
+                 "A1", "A1", "-", "A2", "-", "G1", "-", "E2"],
+      "duration": "1/16",
+      "velocity": [0.9, 0.55, 0, 0.7, 0, 0.6, 0, 0,
+                   0.85, 0.5, 0, 0.7, 0, 0.65, 0, 0.55],
+      "humanize": 0.008,
+      "loop": true
+    },
+    {
+      "id": "melody",
+      "voice": "lead",
+      "type": "notes",
+      "notes": ["-", "-", "E5", "E5", "-", "-", "-", "-",
+                 "-", "-", "D5", "C5", "-", "-", "-", "-",
+                 "-", "-", "E5", "E5", "-", "-", "-", "-",
+                 "-", "-", "A4", "-", "-", "-", "-", "-"],
+      "duration": "1/8",
+      "velocity": [0, 0, 0.8, 0.55, 0, 0, 0, 0,
+                   0, 0, 0.65, 0.75, 0, 0, 0, 0,
+                   0, 0, 0.8, 0.55, 0, 0, 0, 0,
+                   0, 0, 0.7, 0, 0, 0, 0, 0],
+      "humanize": 0.012,
+      "loop": true
+    }
+  ],
+  "timeline": [
+    { "type": "start", "pattern": "hat-open-beat", "offset": "4m" },
+    { "type": "start", "pattern": "melody", "offset": "8m" },
+    { "target": "lead", "to": { "gain": 0.18 }, "duration": "4m", "offset": "12m" },
+    { "target": "master.reverb", "to": { "wet": 0.45 }, "duration": "8m", "offset": "8m" },
+    { "target": "bass", "to": { "filter.frequency": 900 }, "duration": "8m", "offset": "8m" }
+  ],
+  "master": {
+    "reverb": { "decay": 1.8, "wet": 0.2, "damping": 0.6 },
+    "compression": { "threshold": -10, "ratio": 4 },
+    "warmth": 0.35,
+    "gain": 0.75
+  }
+}

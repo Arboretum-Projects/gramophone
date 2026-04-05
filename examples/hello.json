@@ -1,0 +1,75 @@
+{
+  "title": "Hello",
+  "bpm": 120,
+  "key": "C",
+  "scale": "major",
+  "voices": [
+    {
+      "id": "bell",
+      "type": "oscillator",
+      "waveform": "sine",
+      "gain": 0.35,
+      "envelope": {
+        "attack": 0.005,
+        "decay": 0.6,
+        "sustain": 0,
+        "release": 0.4
+      }
+    }
+  ],
+  "patterns": [
+    {
+      "id": "melody",
+      "voice": "bell",
+      "type": "notes",
+      "notes": [
+        "E5",
+        "G5",
+        "C6",
+        "-",
+        "G5",
+        "E5",
+        "D5",
+        "-",
+        "E5",
+        "G5",
+        "A5",
+        "-",
+        "G5",
+        "-",
+        "-",
+        "-"
+      ],
+      "duration": "1/8",
+      "velocity": [
+        0.8,
+        0.6,
+        0.9,
+        0,
+        0.5,
+        0.6,
+        0.7,
+        0,
+        0.8,
+        0.5,
+        0.85,
+        0,
+        0.6,
+        0,
+        0,
+        0
+      ],
+      "humanize": 0.012,
+      "loop": true
+    }
+  ],
+  "master": {
+    "reverb": {
+      "decay": 2.0,
+      "wet": 0.25,
+      "damping": 0.4
+    },
+    "warmth": 0.4,
+    "gain": 0.8
+  }
+}

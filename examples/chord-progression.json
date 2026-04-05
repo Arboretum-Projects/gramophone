@@ -1,0 +1,269 @@
+{
+  "title": "Chord Progression",
+  "bpm": 90,
+  "key": "Eb",
+  "scale": "minor",
+  "voices": [
+    {
+      "id": "pad",
+      "type": "chord",
+      "waveform": "sawtooth",
+      "voices": 3,
+      "spread": 6,
+      "gain": 0.1,
+      "envelope": {
+        "attack": 1.2,
+        "decay": 0.5,
+        "sustain": 0.6,
+        "release": 2.0
+      },
+      "filter": {
+        "type": "lowpass",
+        "frequency": 1800,
+        "Q": 0.8
+      }
+    },
+    {
+      "id": "bass",
+      "type": "oscillator",
+      "waveform": "sine",
+      "gain": 0.22,
+      "envelope": {
+        "attack": 0.01,
+        "decay": 0.3,
+        "sustain": 0.5,
+        "release": 0.4
+      }
+    },
+    {
+      "id": "arp",
+      "type": "oscillator",
+      "waveform": "triangle",
+      "gain": 0.1,
+      "detune": 3,
+      "envelope": "pluck",
+      "pan": 0.3,
+      "filter": {
+        "type": "lowpass",
+        "frequency": 4000
+      }
+    },
+    {
+      "id": "rim",
+      "type": "drum",
+      "sound": "rim",
+      "gain": 0.18
+    }
+  ],
+  "patterns": [
+    {
+      "id": "chords",
+      "voice": "pad",
+      "type": "progression",
+      "chords": [
+        {
+          "notes": [
+            "Eb3",
+            "Gb4",
+            "Bb4"
+          ],
+          "duration": "2m"
+        },
+        {
+          "notes": [
+            "Cb3",
+            "Eb4",
+            "Ab4"
+          ],
+          "duration": "2m"
+        },
+        {
+          "notes": [
+            "Ab2",
+            "Cb4",
+            "Gb4"
+          ],
+          "duration": "2m"
+        },
+        {
+          "notes": [
+            "Bb2",
+            "D4",
+            "Ab4"
+          ],
+          "duration": "2m"
+        }
+      ],
+      "velocity": 0.65,
+      "loop": true
+    },
+    {
+      "id": "bass-notes",
+      "voice": "bass",
+      "type": "notes",
+      "notes": [
+        "Eb2",
+        "-",
+        "F2",
+        "Gb2",
+        "-",
+        "Bb1",
+        "-",
+        "Cb2",
+        "Cb2",
+        "-",
+        "Db2",
+        "Eb2",
+        "-",
+        "Gb1",
+        "-",
+        "Ab1",
+        "Ab1",
+        "-",
+        "Bb1",
+        "Cb2",
+        "-",
+        "Eb2",
+        "-",
+        "Db2",
+        "Bb1",
+        "-",
+        "Cb2",
+        "Db2",
+        "-",
+        "F1",
+        "-",
+        "Eb2"
+      ],
+      "duration": "1/4",
+      "velocity": [
+        0.85,
+        0,
+        0,
+        0.5,
+        0,
+        0.6,
+        0,
+        0.55,
+        0.85,
+        0,
+        0,
+        0.5,
+        0,
+        0.6,
+        0,
+        0.55,
+        0.85,
+        0,
+        0,
+        0.5,
+        0,
+        0.6,
+        0,
+        0.55,
+        0.85,
+        0,
+        0,
+        0.5,
+        0,
+        0.6,
+        0,
+        0.55
+      ],
+      "humanize": 0.01,
+      "loop": true
+    },
+    {
+      "id": "arpeggio",
+      "voice": "arp",
+      "type": "arpeggio",
+      "chord": [
+        "Eb4",
+        "Gb4",
+        "Bb4",
+        "Db5"
+      ],
+      "direction": "updown",
+      "rate": "1/8",
+      "octaves": 1,
+      "velocity": 0.55,
+      "velocityHumanize": 0.1,
+      "humanize": 0.008,
+      "loop": true
+    },
+    {
+      "id": "rim-pattern",
+      "voice": "rim",
+      "type": "rhythm",
+      "steps": 8,
+      "hits": [
+        0,
+        0,
+        1,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "velocity": [
+        0,
+        0,
+        0.45,
+        0,
+        0,
+        0.4,
+        0,
+        0.3
+      ],
+      "velocityHumanize": 0.08,
+      "loop": true
+    }
+  ],
+  "timeline": [
+    {
+      "type": "start",
+      "pattern": "arpeggio",
+      "offset": "4m"
+    },
+    {
+      "type": "start",
+      "pattern": "rim-pattern",
+      "offset": "4m"
+    },
+    {
+      "target": "pad",
+      "to": {
+        "filter.frequency": 3200
+      },
+      "duration": "8m",
+      "offset": "4m"
+    },
+    {
+      "target": "arp",
+      "to": {
+        "gain": 0.14
+      },
+      "duration": "4m",
+      "offset": "8m"
+    }
+  ],
+  "master": {
+    "reverb": {
+      "decay": 2.5,
+      "wet": 0.25,
+      "damping": 0.5
+    },
+    "delay": {
+      "time": "3/8",
+      "feedback": 0.25,
+      "wet": 0.15
+    },
+    "compression": {
+      "threshold": -14,
+      "ratio": 3
+    },
+    "warmth": 0.45,
+    "gain": 0.7
+  }
+}

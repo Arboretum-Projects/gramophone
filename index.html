@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gramophone</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a0f;
+      color: #e0d0c0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+    }
+
+    /* --- Sidebar --- */
+    .sidebar {
+      width: 260px;
+      height: 100vh;
+      background: rgba(20, 18, 22, 0.85);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(255, 180, 100, 0.08);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(255, 180, 100, 0.15); border-radius: 2px; }
+
+    .sidebar-header {
+      padding: 20px 18px 14px;
+      border-bottom: 1px solid rgba(255, 180, 100, 0.06);
+    }
+    .sidebar-header h1 {
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: rgba(255, 180, 100, 0.85);
+      text-transform: uppercase;
+    }
+    .sidebar-header .sub {
+      font-size: 11px;
+      color: rgba(255, 180, 100, 0.35);
+      margin-top: 3px;
+    }
+
+    .scene-section { padding: 10px 0; }
+    .scene-section h2 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255, 180, 100, 0.35);
+      padding: 8px 18px 4px;
+    }
+
+    .scene-cat-header {
+      display: flex;
+      align-items: center;
+      padding: 6px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255, 180, 100, 0.55);
+      cursor: pointer;
+      user-select: none;
+    }
+    .scene-cat-header:hover { color: rgba(255, 180, 100, 0.8); }
+    .scene-chevron {
+      font-size: 9px;
+      margin-right: 8px;
+      transition: transform 0.15s ease;
+      display: inline-block;
+    }
+    .scene-cat-header.collapsed .scene-chevron { transform: rotate(-90deg); }
+
+    .scene-cat-items { overflow: hidden; }
+    .scene-cat-items.collapsed { display: none; }
+
+    .scene-item {
+      padding: 5px 18px 5px 34px;
+      font-size: 12px;
+      color: rgba(255, 180, 100, 0.4);
+      cursor: pointer;
+      transition: color 0.1s, background 0.1s;
+    }
+    .scene-item:hover {
+      color: rgba(255, 180, 100, 0.8);
+      background: rgba(255, 180, 100, 0.04);
+    }
+    .scene-item.active {
+      color: #ffb464;
+      background: rgba(255, 180, 100, 0.08);
+    }
+
+    /* --- Main area --- */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Scene info */
+    .scene-info {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      z-index: 10;
+    }
+    .scene-info .title {
+      font-size: 22px;
+      font-weight: 600;
+      color: rgba(255, 180, 100, 0.7);
+    }
+    .scene-info .meta {
+      font-size: 12px;
+      color: rgba(255, 180, 100, 0.3);
+      margin-top: 4px;
+    }
+
+    /* Visualizer canvas */
+    #visualizer {
+      flex: 1;
+      width: 100%;
+    }
+
+    /* --- Transport --- */
+    .transport {
+      height: 64px;
+      background: rgba(20, 18, 22, 0.85);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 180, 100, 0.08);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .transport button {
+      background: rgba(255, 180, 100, 0.08);
+      border: 1px solid rgba(255, 180, 100, 0.12);
+      color: rgba(255, 180, 100, 0.7);
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .transport button:hover {
+      background: rgba(255, 180, 100, 0.15);
+      color: #ffb464;
+    }
+    .transport button.active {
+      background: rgba(255, 180, 100, 0.2);
+      color: #ffb464;
+    }
+
+    .transport .time {
+      font-size: 13px;
+      font-family: 'SF Mono', 'Cascadia Code', monospace;
+      color: rgba(255, 180, 100, 0.5);
+      min-width: 60px;
+    }
+
+    .transport .bpm-display {
+      font-size: 12px;
+      color: rgba(255, 180, 100, 0.3);
+      margin-left: auto;
+    }
+
+    /* Peak meter */
+    .peak-meter {
+      width: 120px;
+      height: 14px;
+      background: rgba(255, 180, 100, 0.06);
+      border: 1px solid rgba(255, 180, 100, 0.1);
+      border-radius: 3px;
+      overflow: hidden;
+      position: relative;
+    }
+    .peak-meter-fill {
+      height: 100%;
+      width: 0%;
+      background: rgba(255, 180, 100, 0.4);
+      transition: none;
+    }
+    .peak-meter-fill.hot { background: rgba(255, 120, 60, 0.7); }
+    .peak-meter-fill.clip { background: rgba(255, 60, 60, 0.9); }
+    .peak-meter-label {
+      position: absolute;
+      right: 4px;
+      top: 0;
+      font-size: 9px;
+      font-family: 'SF Mono', monospace;
+      color: rgba(255, 180, 100, 0.5);
+      line-height: 14px;
+    }
+
+    .transport .viz-toggle {
+      font-size: 11px;
+      width: auto;
+      padding: 0 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* Keyboard hints */
+    .hints {
+      position: absolute;
+      bottom: 80px;
+      right: 20px;
+      font-size: 10px;
+      color: rgba(255, 180, 100, 0.15);
+      text-align: right;
+      line-height: 1.6;
+    }
+
+    /* Drop zone overlay */
+    .drop-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 10, 15, 0.9);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: rgba(255, 180, 100, 0.6);
+      border: 2px dashed rgba(255, 180, 100, 0.2);
+      margin: 20px;
+      border-radius: 16px;
+    }
+    .drop-overlay.active { display: flex; }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h1>Gramophone</h1>
+    <div class="sub">JSON in, sound out</div>
+  </div>
+  <div class="scene-section">
+    <h2>Scenes</h2>
+    <div id="scene-browser"></div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="scene-info">
+    <div class="title" id="scene-title">--</div>
+    <div class="meta" id="scene-meta"></div>
+  </div>
+
+  <canvas id="visualizer"></canvas>
+
+  <div class="hints">
+    Space: play/pause &middot; R: restart &middot; V: viz mode<br>
+    1-5: toggle reverb/delay/comp/warmth/limiter
+  </div>
+
+  <div class="transport">
+    <button id="btn-play" title="Play / Pause">&#9654;</button>
+    <button id="btn-stop" title="Stop">&#9632;</button>
+    <div class="time" id="time-display">0:00</div>
+    <button class="viz-toggle" id="btn-viz" title="Toggle visualizer mode">Wave</button>
+    <div class="peak-meter" id="peak-meter">
+      <div class="peak-meter-fill" id="peak-meter-fill"></div>
+      <div class="peak-meter-label" id="peak-meter-label">--</div>
+    </div>
+    <div class="bpm-display" id="bpm-display"></div>
+  </div>
+</div>
+
+<div class="drop-overlay" id="drop-overlay">Drop .json scene file</div>
+
+<script type="module">
+import { GramophoneEngine } from './src/engine.js';
+import { Visualizer } from './src/visualizer.js';
+
+const CATEGORIES = [
+  { name: 'Showcase', collapsed: false, scenes: ['swagger', 'evangelion', 'neuromancer', 'midnight-drive', 'ambient-drone', 'four-on-the-floor', 'generative-bells'] },
+  { name: 'Fundamentals', collapsed: false, scenes: ['hello', 'chord-progression'] },
+];
+
+const engine = new GramophoneEngine();
+let visualizer = null;
+let activeScene = null;
+
+// --- Scene browser ---
+function buildSceneBrowser() {
+  const container = document.getElementById('scene-browser');
+  container.innerHTML = '';
+
+  for (const cat of CATEGORIES) {
+    const header = document.createElement('div');
+    header.className = `scene-cat-header${cat.collapsed ? ' collapsed' : ''}`;
+    header.innerHTML = `<span class="scene-chevron">&#9662;</span>${cat.name}`;
+    header.onclick = () => {
+      header.classList.toggle('collapsed');
+      items.classList.toggle('collapsed');
+    };
+
+    const items = document.createElement('div');
+    items.className = `scene-cat-items${cat.collapsed ? ' collapsed' : ''}`;
+
+    for (const name of cat.scenes) {
+      const item = document.createElement('div');
+      item.className = 'scene-item';
+      item.textContent = name;
+      item.onclick = () => loadSceneByName(name);
+      items.appendChild(item);
+    }
+
+    container.appendChild(header);
+    container.appendChild(items);
+  }
+}
+
+function setActiveScene(name) {
+  activeScene = name;
+  document.querySelectorAll('.scene-item').forEach(el => {
+    el.classList.toggle('active', el.textContent === name);
+  });
+  // Auto-expand collapsed parent
+  if (name) {
+    for (const cat of CATEGORIES) {
+      if (cat.scenes.includes(name)) {
+        const headers = document.querySelectorAll('.scene-cat-header');
+        const items = document.querySelectorAll('.scene-cat-items');
+        headers.forEach((h, i) => {
+          if (h.textContent.includes(cat.name) && h.classList.contains('collapsed')) {
+            h.classList.remove('collapsed');
+            items[i]?.classList.remove('collapsed');
+          }
+        });
+      }
+    }
+  }
+}
+
+async function loadSceneByName(name) {
+  try {
+    const res = await fetch(`examples/${name}.json`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`${res.status}`);
+    const json = await res.json();
+    loadScene(json, name);
+  } catch (e) {
+    console.error(`Failed to load scene "${name}":`, e);
+  }
+}
+
+function loadScene(json, name) {
+  engine.stop();
+  engine.loadScene(json);
+
+  document.getElementById('scene-title').textContent = json.title || name || 'Untitled';
+  const parts = [];
+  if (json.bpm) parts.push(`${json.bpm} BPM`);
+  if (json.key) parts.push(`Key: ${json.key}`);
+  if (json.scale) parts.push(json.scale);
+  document.getElementById('scene-meta').textContent = parts.join(' \u00b7 ');
+  document.getElementById('bpm-display').textContent = json.bpm ? `${json.bpm} BPM` : '';
+
+  if (name) setActiveScene(name);
+  updatePlayButton();
+
+  // Setup visualizer
+  if (!visualizer) {
+    const canvas = document.getElementById('visualizer');
+    visualizer = new Visualizer(canvas, engine.getAnalyser());
+    resizeVisualizer();
+    visualizer.start();
+  } else {
+    visualizer.analyser = engine.getAnalyser();
+  }
+}
+
+// --- Transport ---
+function togglePlay() {
+  if (!engine.scene) return;
+  if (engine.transport.state === 'playing') {
+    engine.pause();
+  } else {
+    engine.play();
+  }
+  updatePlayButton();
+}
+
+function stopPlayback() {
+  engine.stop();
+  updatePlayButton();
+}
+
+function updatePlayButton() {
+  const btn = document.getElementById('btn-play');
+  btn.innerHTML = engine.transport.state === 'playing' ? '&#10074;&#10074;' : '&#9654;';
+  btn.classList.toggle('active', engine.transport.state === 'playing');
+}
+
+// Time display + peak meter
+const peakBuf = new Float32Array(2048);
+function updateTimeDisplay() {
+  requestAnimationFrame(updateTimeDisplay);
+  const t = engine.transport.elapsed;
+  const min = Math.floor(t / 60);
+  const sec = Math.floor(t % 60).toString().padStart(2, '0');
+  document.getElementById('time-display').textContent = `${min}:${sec}`;
+
+  // Peak meter
+  const analyser = engine.getAnalyser();
+  if (analyser && engine.transport.state === 'playing') {
+    analyser.getFloatTimeDomainData(peakBuf);
+    let peak = 0;
+    for (let i = 0; i < peakBuf.length; i++) {
+      const abs = Math.abs(peakBuf[i]);
+      if (abs > peak) peak = abs;
+    }
+    const pct = Math.min(100, peak * 100);
+    const db = peak > 0.0001 ? (20 * Math.log10(peak)).toFixed(1) : '-inf';
+    const fill = document.getElementById('peak-meter-fill');
+    fill.style.width = pct + '%';
+    fill.className = 'peak-meter-fill' + (peak > 0.95 ? ' clip' : peak > 0.7 ? ' hot' : '');
+    document.getElementById('peak-meter-label').textContent = db + ' dB';
+  }
+}
+
+// --- Drag and drop ---
+document.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  document.getElementById('drop-overlay').classList.add('active');
+});
+document.addEventListener('dragleave', (e) => {
+  if (e.relatedTarget) return;
+  document.getElementById('drop-overlay').classList.remove('active');
+});
+document.addEventListener('drop', (e) => {
+  e.preventDefault();
+  document.getElementById('drop-overlay').classList.remove('active');
+  const file = e.dataTransfer.files[0];
+  if (file && file.name.endsWith('.json')) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const json = JSON.parse(reader.result);
+        loadScene(json, file.name.replace('.json', ''));
+        setActiveScene(null);
+      } catch (err) {
+        console.error('Failed to parse dropped file:', err);
+      }
+    };
+    reader.readAsText(file);
+  }
+});
+
+// --- Keyboard shortcuts ---
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT') return;
+  switch (e.key) {
+    case ' ':
+      e.preventDefault();
+      togglePlay();
+      break;
+    case 'r':
+    case 'R':
+      stopPlayback();
+      break;
+    case 'v':
+    case 'V':
+      if (visualizer) {
+        visualizer.toggleMode();
+        document.getElementById('btn-viz').textContent = visualizer.mode === 'waveform' ? 'Wave' : 'Freq';
+      }
+      break;
+    case '1': case '2': case '3': case '4': case '5': {
+      const fx = ['reverb', 'delay', 'compression', 'warmth', 'limiter'][parseInt(e.key) - 1];
+      const on = engine.toggleEffect(fx);
+      console.log(`[gramophone] ${fx}: ${on ? 'ON' : 'OFF'}`);
+      break;
+    }
+    case 's':
+    case 'S': {
+      if (!engine.scene) break;
+      if (window._soloIdx === undefined) window._soloIdx = -1;
+      const ids = engine.getVoiceIds();
+      window._soloIdx++;
+      if (window._soloIdx >= ids.length) window._soloIdx = -1;
+      const name = engine.soloVoice(window._soloIdx);
+      console.log(`[gramophone] solo: ${name}`);
+      break;
+    }
+  }
+});
+
+// --- Resize ---
+function resizeVisualizer() {
+  if (visualizer) visualizer.resize();
+  else {
+    const c = document.getElementById('visualizer');
+    c.width = c.clientWidth * devicePixelRatio;
+    c.height = c.clientHeight * devicePixelRatio;
+  }
+}
+window.addEventListener('resize', resizeVisualizer);
+
+// --- Button handlers ---
+document.getElementById('btn-play').onclick = togglePlay;
+document.getElementById('btn-stop').onclick = stopPlayback;
+document.getElementById('btn-viz').onclick = () => {
+  if (visualizer) {
+    visualizer.toggleMode();
+    document.getElementById('btn-viz').textContent = visualizer.mode === 'waveform' ? 'Wave' : 'Freq';
+  }
+};
+
+// --- Init ---
+buildSceneBrowser();
+updateTimeDisplay();
+
+// Load from URL param
+const params = new URLSearchParams(location.search);
+const sceneParam = params.get('scene');
+if (sceneParam) {
+  const name = sceneParam.replace('.json', '').split('/').pop();
+  loadSceneByName(name);
+}
+</script>
+</body>
+</html>

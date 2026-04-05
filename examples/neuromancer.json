@@ -1,0 +1,188 @@
+{
+  "title": "Neuromancer",
+  "bpm": 135,
+  "key": "F#",
+  "scale": "phrygian",
+  "swing": 0.03,
+  "voices": [
+    { "id": "kick", "type": "drum", "sound": "kick", "gain": 0.7, "pitch": -2 },
+    { "id": "snare", "type": "drum", "sound": "snare", "gain": 0.4, "pitch": 5 },
+    { "id": "hat", "type": "drum", "sound": "hihat", "gain": 0.2 },
+    { "id": "rim", "type": "drum", "sound": "rim", "gain": 0.15, "pitch": 8 },
+    {
+      "id": "sub",
+      "type": "oscillator",
+      "waveform": "sine",
+      "gain": 0.22,
+      "envelope": { "attack": 0.005, "decay": 0.25, "sustain": 0.35, "release": 0.1 },
+      "sidechain": { "source": "kick", "amount": 0.85, "release": 0.08 }
+    },
+    {
+      "id": "bass",
+      "type": "oscillator",
+      "waveform": "sawtooth",
+      "gain": 0.15,
+      "detune": 4,
+      "envelope": { "attack": 0.003, "decay": 0.12, "sustain": 0.3, "release": 0.08 },
+      "filter": { "type": "lowpass", "frequency": 400, "Q": 5 },
+      "sidechain": { "source": "kick", "amount": 0.7, "release": 0.1 }
+    },
+    {
+      "id": "pad",
+      "type": "chord",
+      "waveform": "sawtooth",
+      "voices": 4,
+      "spread": 10,
+      "gain": 0.06,
+      "envelope": { "attack": 1.5, "decay": 0.8, "sustain": 0.4, "release": 2.5 },
+      "filter": { "type": "lowpass", "frequency": 1200, "Q": 1.5 },
+      "sidechain": { "source": "kick", "amount": 0.25, "release": 0.15 }
+    },
+    {
+      "id": "lead",
+      "type": "oscillator",
+      "waveform": "square",
+      "gain": 0.08,
+      "detune": 8,
+      "envelope": { "attack": 0.01, "decay": 0.15, "sustain": 0.25, "release": 0.4 },
+      "filter": { "type": "lowpass", "frequency": 2800, "Q": 3 },
+      "pan": 0.2
+    },
+    {
+      "id": "arp-voice",
+      "type": "oscillator",
+      "waveform": "sawtooth",
+      "gain": 0.07,
+      "detune": 3,
+      "envelope": "pluck",
+      "filter": { "type": "bandpass", "frequency": 3500, "Q": 2 },
+      "pan": -0.35
+    }
+  ],
+  "patterns": [
+    {
+      "id": "kick-beat",
+      "voice": "kick",
+      "type": "rhythm",
+      "steps": 16,
+      "hits":     [1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0],
+      "velocity": [1, 0, 0, 0, 0.85, 0, 0, 0, 0.95, 0, 0, 0.6, 1, 0, 0, 0],
+      "loop": true
+    },
+    {
+      "id": "snare-beat",
+      "voice": "snare",
+      "type": "rhythm",
+      "steps": 16,
+      "hits":     [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1],
+      "velocity": [0, 0, 0, 0.3, 0.9, 0, 0, 0, 0, 0, 0.35, 0, 0.85, 0, 0, 0.3],
+      "velocityHumanize": 0.06,
+      "loop": true
+    },
+    {
+      "id": "hat-beat",
+      "voice": "hat",
+      "type": "rhythm",
+      "steps": 16,
+      "hits":     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      "velocity": [0.6, 0.3, 0.45, 0.3, 0.55, 0.3, 0.45, 0.3, 0.6, 0.3, 0.45, 0.3, 0.55, 0.3, 0.5, 0.35],
+      "velocityHumanize": 0.12,
+      "loop": true
+    },
+    {
+      "id": "rim-pattern",
+      "voice": "rim",
+      "type": "rhythm",
+      "steps": 16,
+      "hits":     [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+      "velocity": [0, 0, 0, 0, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0.4, 0, 0],
+      "velocityHumanize": 0.08,
+      "loop": true
+    },
+    {
+      "id": "sub-line",
+      "voice": "sub",
+      "type": "notes",
+      "notes": ["F#1", "-", "-", "-", "F#1", "-", "-", "E1",
+                 "-", "-", "F#1", "-", "G1", "-", "F#1", "-"],
+      "duration": "1/16",
+      "velocity": [0.9, 0, 0, 0, 0.7, 0, 0, 0.6,
+                   0, 0, 0.8, 0, 0.65, 0, 0.5, 0],
+      "loop": true
+    },
+    {
+      "id": "bassline",
+      "voice": "bass",
+      "type": "notes",
+      "notes": ["F#2", "-", "F#2", "-", "A2", "-", "F#2", "E2",
+                 "-", "F#2", "-", "G2", "A2", "-", "G2", "F2"],
+      "duration": "1/16",
+      "velocity": [0.85, 0, 0.5, 0, 0.7, 0, 0.55, 0.6,
+                   0, 0.5, 0, 0.6, 0.75, 0, 0.5, 0.45],
+      "humanize": 0.006,
+      "loop": true
+    },
+    {
+      "id": "pad-chords",
+      "voice": "pad",
+      "type": "progression",
+      "chords": [
+        { "notes": ["F#3", "A4", "E5"], "duration": "2m" },
+        { "notes": ["G3", "B4", "E5"], "duration": "2m" },
+        { "notes": ["E3", "A4", "C#5"], "duration": "2m" },
+        { "notes": ["D3", "F#4", "C#5"], "duration": "2m" }
+      ],
+      "velocity": 0.55,
+      "loop": true
+    },
+    {
+      "id": "lead-melody",
+      "voice": "lead",
+      "type": "notes",
+      "notes": ["F#4", "-", "A4", "G4", "-", "F#4", "E4", "-",
+                 "F#4", "-", "-", "-", "-", "-", "-", "-",
+                 "A4", "-", "B4", "A4", "-", "G4", "F#4", "-",
+                 "E4", "-", "F#4", "-", "-", "-", "-", "-"],
+      "duration": "1/8",
+      "velocity": [0.8, 0, 0.6, 0.5, 0, 0.55, 0.7, 0,
+                   0.85, 0, 0, 0, 0, 0, 0, 0,
+                   0.7, 0, 0.65, 0.5, 0, 0.5, 0.65, 0,
+                   0.75, 0, 0.55, 0, 0, 0, 0, 0],
+      "humanize": 0.015,
+      "loop": true
+    },
+    {
+      "id": "arp",
+      "voice": "arp-voice",
+      "type": "arpeggio",
+      "chord": ["F#4", "A4", "C#5", "E5"],
+      "direction": "updown",
+      "rate": "1/16",
+      "octaves": 1,
+      "velocity": 0.5,
+      "velocityHumanize": 0.12,
+      "humanize": 0.005,
+      "loop": true
+    }
+  ],
+  "timeline": [
+    { "type": "start", "pattern": "kick-beat", "offset": "4m" },
+    { "type": "start", "pattern": "snare-beat", "offset": "4m" },
+    { "type": "start", "pattern": "hat-beat", "offset": "4m" },
+    { "type": "start", "pattern": "rim-pattern", "offset": "8m" },
+    { "type": "start", "pattern": "arp", "offset": "8m" },
+    { "type": "start", "pattern": "lead-melody", "offset": "12m" },
+
+    { "target": "pad", "to": { "filter.frequency": 2800 }, "duration": "8m", "offset": "4m" },
+    { "target": "bass", "to": { "filter.frequency": 800 }, "duration": "4m", "offset": "8m" },
+    { "target": "lead", "to": { "filter.frequency": 4500 }, "duration": "4m", "offset": "12m" },
+    { "target": "master.reverb", "to": { "wet": 0.4 }, "duration": "8m", "offset": "8m" }
+  ],
+  "master": {
+    "reverb": { "decay": 2.0, "wet": 0.22, "damping": 0.6 },
+    "delay": { "time": "3/8", "feedback": 0.3, "wet": 0.18, "filter": 2000 },
+    "compression": { "threshold": -8, "ratio": 5 },
+    "warmth": 0.3,
+    "gain": 0.7
+  }
+}
